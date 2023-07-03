@@ -32,7 +32,7 @@ npx nodemon app.ts //For active reload when changes on the script happen
 npx ts-node app.ts //Normal server execution
 ```
 
-> The available API endpoint is at "/expensive" and requires a JSON with the next formatting:
+> The available API POST endpoint is at "/expensive" and requires a JSON with the next formatting:
 > 
 ```json
 {
