@@ -1,0 +1,20 @@
+{
+  "name": "exercise-1",
+  "version": "1.0.0",
+  "description": "You are tasked with developing a web application that needs to process a large amount of\r computationally intensive tasks in parallel. Each task involves complex mathematical calculations\r that take a significant amount of time to complete. The application needs to scale efficiently and\r make use of all available CPU resources to minimize the processing time.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "nodemon": "^2.0.22",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.6"
+  }
+}
