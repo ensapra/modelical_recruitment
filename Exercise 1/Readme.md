@@ -20,3 +20,24 @@ Other requirements:
 
 Tips: do not focus on api design, just focus on the multithreaded parallelization of the processes,
 testing is not required but clean code and design patterns are always welcomed
+
+# Solution
+The solution makes use of the **worker_threads** library from Node.js, to split the work into different threads. In this case, it makes use of the os.cpus().length to know the amount of logical cpus available, and uses that as the factor to split the workload in the most efficient and safe way.
+
+- app.ts: Contains the main script, can be started through:
+
+```
+npx nodemon app.ts //For active reload when changes on the script happen
+
+npx ts-node app.ts //Normal server execution
+```
+
+> The available API endpoint is at "/expensive" and requires a JSON with the next formatting:
+> 
+```json
+{
+    "numbers": [...]
+}
+```
+
+- worker.js: Contains the expensive method call, Fibonacci. Although this version is not extremely expensive, it can be substituted by other more expensive variations. 

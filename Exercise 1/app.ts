@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import express from 'express';
 import { Worker } from 'worker_threads';
+import os from 'os'
+import { debug } from 'console';
 
 var app = express();
 
@@ -25,14 +27,15 @@ function calculateExpensiveFunction(workerdata: number[]) : Promise<number[]>{
     })
 }
 
-app.post('/', (req: Request, res: Response) => {
+app.post('/expensive', (req: Request, res: Response) => {
   const numbers = req.body.numbers; //We get the numbers from the request
   if (!Array.isArray(numbers)) {
     res.status(400).json({ error: 'Invalid input', message: 'Numbers must be an array' });
     return;
   }
 
-  const chunkSize: number = 1;
+  const availableCores = os.cpus().length;
+  const chunkSize: number = numbers.length/availableCores;
   const chunks: number[][] = [];
   for (let i = 0; i < numbers.length; i += chunkSize) {
     const chunk = numbers.slice(i, i + chunkSize);
@@ -46,7 +49,7 @@ app.post('/', (req: Request, res: Response) => {
     finalArrays.map((number: number[])=>{
       results.push(...number);
     });
-    console.log("Correct Request");
+    console.log("Completed Successfully")
     res.status(200).json({results});
   }).catch((error)=>{
     console.error('There was an error: ', error);
