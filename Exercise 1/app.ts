@@ -59,3 +59,6 @@ app.post('/expensive', (req: Request, res: Response) => {
   })
 })
 
+app.get('*', function(req:Request, res:Response) {
+    res.status(404).json({error: "This endpoint doesn't exist"});
+});
