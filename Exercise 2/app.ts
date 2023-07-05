@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import express from 'express';
-import joi from "joi";
+import joi, { date } from "joi";
 import 'joi-extract-type'
 import { Model } from './models/model';
 import { Project } from './models/project';
@@ -16,13 +16,16 @@ const ProjectSch = joi.object({
     models: joi.array().items(ModelSch).optional()
 })
 
+const ProjectSchPut = joi.object({
+    name: joi.string().optional(),
+    description: joi.string().optional(),
+    models: joi.array().items(ModelSch).optional()
+})
+
 //Initialization of the server
 var app = express();
 app.use(express.urlencoded())
 app.use(express.json());
-app.listen(3000, () => {
- console.log("Server running on port 3000");
-});
 
 var projects: Project[] = []
 var models: Model[] = []
@@ -37,7 +40,6 @@ app.get("/models", (req: Request, res: Response)=>{
 app.get("/models/:modelID", (req: Request, res: Response)=>{
     //Returns the model with the specified ID.
     const modelID = req.params.modelID;
-    console.log(modelID);
     const requestedModel = models.find((model: Model)=> model.ID === modelID);
     if(requestedModel)
         res.status(200).json(requestedModel);
@@ -59,8 +61,8 @@ app.put("/models/:modelID", (req: Request, res: Response)=>{
         const model = models.find((model:Model)=> model.ID === modelID);
         if(model)
         {    
-            model.name = result.name;
-            model.description = result.description;
+            model.name = result.name.trim().substring(0,255);
+            model.description = result.description.trim().substring(0,1000);
             model.verticesCount = result.verticesCount;
             res.status(200).send(model);
         }
@@ -103,10 +105,33 @@ app.post("/projects", (req: Request, res: Response)=>{
             return;
         }
         result.ID = Date.now().toString();
-        if(!result.models)
-            result.models = []
+        result.name = result.name.trim().substring(0,255);
+        result.description = result.description.trim().substring(0,1000);
+        var modelsToAdd = result.models;
+        result.models = [];
         projects.push(result);
-        res.status(200).send(result);
+        if(!modelsToAdd)
+            res.status(200).send(result);
+        else
+        {
+            modelsToAdd.forEach((model: any)=>{
+                const validatedModel:any = ModelSch.validate(model)
+                if(validatedModel)
+                {
+                    if(validatedModel.error)
+                    {
+                        res.status(400).send(result.error.details[0].message);
+                        return;
+                    }
+                    validatedModel.value.ID = Date.now().toString();
+                    validatedModel.value.projectID = result.ID;
+                    result.models.push(validatedModel.value)
+                    models.push(validatedModel.value);    
+                }
+            });
+            res.status(200).send(result);
+        }
+
     }).catch((error)=>{
         res.status(500).json({ error: 'An error occurred', message: error.message }); //Return the error to the client
     })    
@@ -128,7 +153,7 @@ app.get("/projects/:projectID", (req: Request, res: Response)=>{
 app.put("/projects/:projectID", (req: Request, res: Response)=>{
     //Update an existing project: Expects a JSON payload with updated project details. Updates the project with the specified ID and returns the updated project.
     const projectId = req.params.projectID;
-    ProjectSch.validateAsync(req.body).then((result)=>{
+    ProjectSchPut.validateAsync(req.body).then((result)=>{
         if(result.error)
         {
             res.status(400).send(result.error.details[0].message);
@@ -138,13 +163,19 @@ app.put("/projects/:projectID", (req: Request, res: Response)=>{
         const requestedProject = projects.find((project: Project)=> project.ID === projectId);
         if(!requestedProject) res.status(400).send({error: {status: 400, message: "invalid id"}})
         else{
-            requestedProject.description = result.description;
-            requestedProject.name = result.name;
+            if(result.name)
+                requestedProject.name = result.name.trim().substring(0,255);
+            if(result.description)
+                requestedProject.description = result.description.trim().substring(0,1000);
+            const newModels: Model[] = [];
             if(result.models){
-                result.models.foreach((model: Model)=>{
-                    if(!models.includes(model))
-                        models.push(model);
+                result.models.forEach((model: Model)=>{
+                    model.ID = Date.now().toString();
+                    model.projectID = requestedProject.ID;
+                    models.push(model);
+                    newModels.push(model);
                 })
+                requestedProject.models = newModels;
             }
             res.status(200).send(requestedProject);
         }
@@ -194,6 +225,8 @@ app.post("/projects/:projectID/models", (req: Request, res: Response)=>{
         const requestedProject = projects.find((project: Project)=> project.ID === projectId);
         if(requestedProject != undefined)
         {
+            result.name = result.name.trim().substring(0,255);
+            result.description = result.description.trim().substring(0,1000);
             result.projectID = requestedProject.ID;
             result.ID = Date.now().toString();
             models.push(result);
@@ -210,3 +243,5 @@ app.post("/projects/:projectID/models", (req: Request, res: Response)=>{
 app.get('*', function(req:Request, res:Response) {
     res.status(404).json({error: "This endpoint doesn't exist"});
 });
+
+export default app
