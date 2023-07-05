@@ -34,12 +34,13 @@ app.get("/models", (req: Request, res: Response)=>{
         return project.models;
     })).then((models: Model[][])=>{
         models.map((model: Model[])=>{
-            finalModels.push(...model);
+            if(model)
+                finalModels.push(...model);
         })
-        res.status(200).json(finalModels);
+        res.status(200).send(finalModels);
     }).catch((error)=>{
         console.error("There has been an error ", error);
-        res.status(500).json({ error: 'An error occurred', message: error.message }); //Return the error to the client
+        res.status(500).send({ error: 'An error occurred', message: error.message }); //Return the error to the client
     })
 })
 
@@ -47,9 +48,12 @@ app.get("/models/:modelID", (req: Request, res: Response)=>{
     //Returns the model with the specified ID.
     const modelID = req.params.id;
     const requestedModel = projects.find((project: Project)=>{
-        project.models.find((model: Model)=>{
-            model.ID === modelID;
-        })
+        if(project.models)
+        {
+            project.models.find((model: Model)=>{
+                model && model.ID === modelID;
+            })
+        }
     })
 
     if(requestedModel != null)
@@ -63,44 +67,41 @@ app.put("/models/:modelID", (req: Request, res: Response)=>{
     //model with the specified ID and returns the updated model.
     const modelID = req.params.id;
     ModelSch.validateAsync(req.body).then((result)=>{
-            if(result.error)
+        if(result.error)
+        {
+            res.status(400).send(result.error.details[0].message);
+            return;
+        }
+        projects.forEach((project: Project)=> {
+            if(project.models)
             {
-                res.status(400).send(result.error.details[0].message);
-                return;
-            }
-
-            projects.find((project: Project)=>{
-            const requestedModel = project.models.find((model: Model)=>{
-                model.ID === modelID;
-            })
-                
-            if(!requestedModel) res.status(400).send({error: {status: 400, message: "invalid id"}})
-            else{
-                requestedModel.name = result.name;
-                requestedModel.description = result.description;
-                requestedModel.verticesCount = result.verticesCount;
-                res.status(200).send(requestedModel);
+                const ModelFound = project.models.find((model:Model)=> model && model.ID === modelID)
+                if(!ModelFound) res.status(400).send({error: {status: 400, message: "invalid id"}})
+                else{
+                    ModelFound.name = result.name;
+                    ModelFound.description = result.description;
+                    ModelFound.verticesCount = result.verticesCount;
+                    res.status(200).send(ModelFound);
+                    return;
+                }
             }
         })
+        res.status(400).json({error: {status: 400, message: "invalid id"}})
     }).catch((error)=>{
         res.status(500).json({ error: 'An error occurred', message: error.message }); //Return the error to the client
     })
 })
 
-app.delete("/model/:modelID", (req: Request, res: Response)=>{
+app.delete("/models/:modelID", (req: Request, res: Response)=>{
     //Deletes the model with the specified ID.
-    var notFoundModel: Boolean = true
     const modelID = req.params.id;
-    projects.find((project: Project)=>{
-        if(project.models.find((model: Model) => model.ID === modelID))
-        {
-            project.models = project.models.filter((m: Model)=> m.ID !== modelID);
-            notFoundModel = false;
-            res.status(200).json({message: "Successfully deleted project with id: "+ modelID});
-        }
-    })
-
-    if(notFoundModel != null)
+    const targetProject = projects.find((project: Project)=> project.models && project.models.find((model: Model) => model.ID === modelID));
+    if(targetProject)
+    {
+        targetProject.models = targetProject.models.filter((m: Model)=> m.ID !== modelID);
+        res.status(200).json({message: "Successfully deleted project with id: "+ modelID});
+    }
+    else
         res.status(400).json({error: {status: 400, message: "invalid id"}})
 })
 
@@ -121,7 +122,9 @@ app.post("/projects", (req: Request, res: Response)=>{
             res.status(400).send(result.error.details[0].message);
             return;
         }
-                  
+        result.ID = Date.now().toString();
+        if(!result.models)
+            result.models = []
         projects.push(result);
         res.status(200).send(result);
     }).catch((error)=>{
@@ -154,14 +157,13 @@ app.put("/projects/:projectID", (req: Request, res: Response)=>{
         if(!requestedProject) res.status(400).send({error: {status: 400, message: "invalid id"}})
         else{
             requestedProject.description = result.description;
-            requestedProject.modelCount = result.modelCount;
             requestedProject.models = result.models;
             requestedProject.name = result.name;
-            requestedProject.totalVertexCount = result.totalVertexCount;
             res.status(200).send(requestedProject);
         }
+    }).catch((error)=>{
+        res.status(500).json({ error: 'An error occurred', message: error.message }); //Return the error to the client
     })
-
 })
 
 app.delete("/projects/:projectID", (req: Request, res: Response)=>{
@@ -176,7 +178,7 @@ app.delete("/projects/:projectID", (req: Request, res: Response)=>{
         res.status(400).json({error: {status: 400, message: "invalid id"}})
 })
 
-app.get("/project/:projectID/models/", (req: Request, res: Response)=>{
+app.get("/projects/:projectID/models/", (req: Request, res: Response)=>{
     //Returns an array of all models belonging to the project with the specified ID.
     const projectId = req.params.projectID;
     const requestedProject = projects.find((project: Project)=> project.ID === projectId);
@@ -187,7 +189,7 @@ app.get("/project/:projectID/models/", (req: Request, res: Response)=>{
     
 })
 
-app.post("/project/:projectID/models", (req: Request, res: Response)=>{
+app.post("/projects/:projectID/models", (req: Request, res: Response)=>{
     //Add a new model to a project: Expects a JSON payload with model details (name,
     //description, etc.). Adds the new model to the project with the specified ID and returns the
     //created model.
@@ -202,11 +204,15 @@ app.post("/project/:projectID/models", (req: Request, res: Response)=>{
         const requestedProject = projects.find((project: Project)=> project.ID === projectId);
         if(requestedProject != undefined)
         {
+            result.projectID = requestedProject.ID;
+            result.ID = Date.now().toString();
             requestedProject.models.push(result);
             res.status(200).json(result);
         }
         else
             res.status(400).json({error: {status: 400, message: "invalid id"}})
+    }).catch((error)=>{
+        res.status(500).json({ error: 'An error occurred', message: error.message }); //Return the error to the client
     })
 })
 
