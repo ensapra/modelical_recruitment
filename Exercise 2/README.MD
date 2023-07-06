@@ -25,4 +25,17 @@ Other requirements:
 While you must use Node.Js you are allowed to use the frameworks or libraries that you want,but it should allow some features such as (reliability, oauth, ci/cd, testing, performance, ... ) for handling HTTP requests and responses. You can store the models, projects, and sites in separate in-memory arrays for simplicity.
 
 # Solution
-You can find the diferent endpoints of the solution at [EndPoints](<Exercise 2.postman_collection.json>)
+You can find the diferent endpoints of the solution at [EndPoints](<Exercise 2.postman_collection.json>).
+
+- app.ts: Contains the main script
+- /test/app.test.ts: Contains the tests of the project. Can be run through:
+```
+npm test
+```
+
+- server.ts: Contains the launch of app.ts. Can be started through:
+```
+npx nodemon app.ts //For active reload when changes on the script happen
+
+npx ts-node app.ts //Normal server execution
+```
