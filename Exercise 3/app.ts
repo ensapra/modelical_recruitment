@@ -40,7 +40,7 @@ function GenerateChartData(filter: ChartFilter, chartType: string): ChartData
     newChart.updatedAt = Date.now();
     newChart.key = filter.chartDatakey;
     newChart.type = chartType;
-    newChart.title = '${filter.project}/${filter.analysis}:${filter.from}-${filter.to}';
+    newChart.title = `${filter.project}/${filter.analysis}:${filter.from}-${filter.to}`;
     newChart.xAxis = "TimeStamp";
     newChart.yAxis = ChartDataKey[filter.chartDatakey!];
     //Get unique documents
