@@ -4,6 +4,8 @@ import joi, { date } from "joi";
 import 'joi-extract-type'
 import { Model } from './models/model';
 import { Project } from './models/project';
+
+import { SwapModels, SwapProjects, models, projects } from './test/data';
 const ModelSch = joi.object({
     name: joi.string().required(),
     description: joi.string().required(),
@@ -26,9 +28,6 @@ const ProjectSchPut = joi.object({
 var app = express();
 app.use(express.urlencoded())
 app.use(express.json());
-
-var projects: Project[] = []
-var models: Model[] = []
 
 //MODEL ENDPOINTS
 app.get("/models", (req: Request, res: Response)=>{
@@ -76,7 +75,7 @@ app.delete("/models/:modelID", (req: Request, res: Response)=>{
     const modelID = req.params.modelID;
     if(models.find((m:Model)=> m.ID === modelID))
     {
-        models = models.filter((model:Model)=> model.ID!== modelID);
+        SwapModels(models.filter((model:Model)=> model.ID!== modelID));
         res.status(200).json({message: "Successfully deleted project with id: "+ modelID});
     }
     else
@@ -189,8 +188,8 @@ app.delete("/projects/:projectID", (req: Request, res: Response)=>{
     const id = req.params.projectID;
     if(projects.find((project: Project) => project.ID == id))
     {
-        projects = projects.filter((project: Project)=> project.ID !== id);
-        models = models.filter((model: Model)=> model.projectID !== id);
+        SwapProjects(projects.filter((project: Project)=> project.ID !== id));
+        SwapModels(models.filter((model: Model)=> model.projectID !== id));
         res.status(200).json({message: "Successfully deleted project with id: "+ id});
     }
     else
