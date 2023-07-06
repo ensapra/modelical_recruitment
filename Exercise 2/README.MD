@@ -25,3 +25,4 @@ Other requirements:
 While you must use Node.Js you are allowed to use the frameworks or libraries that you want,but it should allow some features such as (reliability, oauth, ci/cd, testing, performance, ... ) for handling HTTP requests and responses. You can store the models, projects, and sites in separate in-memory arrays for simplicity.
 
 # Solution
+You can find the diferent endpoints of the solution at [EndPoints](<Exercise 2.postman_collection.json>)

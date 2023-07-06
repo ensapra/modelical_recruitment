@@ -7,7 +7,7 @@ The API should have the following functionalities:
 - For each chunk, performs a computationally intensive mathematical operation (e.g.,
 calculating prime numbers, finding Fibonacci sequence, etc.) on each number.
 - Aggregates the results from all the chunks and sends the response back to the client.
-- 
+  
 Other requirements:
 - Implement using Node.js and TypeScript
 

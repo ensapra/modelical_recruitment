@@ -1,0 +1,386 @@
+{
+	"info": {
+		"_postman_id": "62b8e70a-861f-4962-8585-7014e7f584f1",
+		"name": "Exercise 2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28312910"
+	},
+	"item": [
+		{
+			"name": "Get All Models",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"THis is a test\", function(){\r",
+							"\r",
+							"    pm.response.to.have.status(200)\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:3000/models",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"models"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Model with ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:3000/models/:modelID",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"models",
+						":modelID"
+					],
+					"variable": [
+						{
+							"key": "modelID",
+							"value": "1688572849212"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Modify Model with ID",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"This is a new Name\",\r\n    \"description\": \"This is a new description\",\r\n    \"verticesCount\" : 5\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3000/models/:modelID",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"models",
+						":modelID"
+					],
+					"variable": [
+						{
+							"key": "modelID",
+							"value": "1688572849212"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Model with ID",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:3000/models/:modelID",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"models",
+						":modelID"
+					],
+					"variable": [
+						{
+							"key": "modelID",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Projects",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ID\": \"asd\",\r\n    \"name\": \"string\",\r\n    \"description\": \"string\",\r\n    \"modelCount\": 3,\r\n    \"totalVertexCount\": 4\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3000/projects/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"projects",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post a model to a Project",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"string\",\r\n    \"description\": \"string\",\r\n    \"verticesCount\": 3\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3000/projects/:projectID/models",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"projects",
+						":projectID",
+						"models"
+					],
+					"variable": [
+						{
+							"key": "projectID",
+							"value": "1688572843793"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Project with ID",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3000/projects/:projectID",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"projects",
+						":projectID"
+					],
+					"variable": [
+						{
+							"key": "projectID",
+							"value": "1688572843793"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Modify Project with ID",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"This is a new Name\",\r\n    \"description\": \"This is a new description\",\r\n    \"models\": [{\r\n        \"name\": \"string\",\r\n        \"description\": \"string\",\r\n        \"verticesCount\": 3\r\n    }]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3000/projects/:projectID",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"projects",
+						":projectID"
+					],
+					"variable": [
+						{
+							"key": "projectID",
+							"value": "1688589766107"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Project with ID",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:3000/projects/:projectID",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"projects",
+						":projectID"
+					],
+					"variable": [
+						{
+							"key": "projectID",
+							"value": "1688572843793"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Models from Project",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:3000/projects/:projectID/models",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"projects",
+						":projectID",
+						"models"
+					],
+					"variable": [
+						{
+							"key": "projectID",
+							"value": "1688572685114"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create New Project",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Hey!\",\r\n    \"description\": \"How's it going\",\r\n    \"models\": [{\r\n        \"name\": \"string\",\r\n        \"description\": \"string\",\r\n        \"verticesCount\": 3\r\n    }]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3000/projects/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"projects",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
