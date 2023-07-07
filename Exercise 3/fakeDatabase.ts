@@ -2,7 +2,7 @@ import { ChartFilter } from "./app";
 import { ChartDataKey } from "./models/bucket";
 import { Test, TestContentType, TestDefined, TestStatus } from "./models/test";
 
-const numberOfTestsPerProject = 200000000;
+const numberOfTestsPerProject = 200000;
 const numberOfProjects = 100;
 const numberOfAnalysis = 100;
 const numbeOfDocuments = 10;
@@ -17,7 +17,7 @@ async function* counter() {
 
 export async function GenerateTests(){
     tests = [];
-    console.log("Start Generation")
+    console.log("Starting generation of data")
     for await (const i of counter()){
         let newTest: Test = new TestDefined();
         newTest.ID = i.toString();
@@ -47,5 +47,3 @@ export function GetFilter():ChartFilter{
     console.log("Generated fake filter");
     return filter;
 }
-
-GenerateTests();

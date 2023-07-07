@@ -32,7 +32,6 @@ app.use(express.json());
 //MODEL ENDPOINTS
 app.get("/models", (req: Request, res: Response)=>{
     //Returns an array of all models in the collection.
-    //const finalModels: Model[] = [];
     res.status(200).send(models);
 })
 

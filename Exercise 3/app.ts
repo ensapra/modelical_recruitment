@@ -11,6 +11,11 @@ app.use(express.urlencoded())
 app.use(express.json());
 app.listen(3000, () => {
  console.log("Server running on port 3000");
+ GenerateTests().then(()=>{
+        const filter = GetFilter();
+        let Chart = GenerateChartData(filter, "pie");
+        console.log(Chart);
+    })
 });
 
 
@@ -75,9 +80,3 @@ function RandomColor():string{ //https://www.geeksforgeeks.org/javascript-genera
         color += letters[(Math.floor(Math.random() * 16))];
     return color;
 }
-
-GenerateTests().then(()=>{
-    const filter = GetFilter();
-    let Chart = GenerateChartData(filter, "pie");
-    console.log(Chart);
-})

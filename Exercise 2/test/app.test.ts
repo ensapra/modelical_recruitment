@@ -4,6 +4,8 @@ import request from 'supertest'
 import supertest from 'supertest';
 import { models, projects } from './data';
 
+//Tests for the API calls
+
 const fakeIncompleteProject = {
     name: "An incomplete name",
     description: "An incomplete description",

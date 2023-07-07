@@ -12,6 +12,7 @@ app.listen(3000, () => {
  console.log("Server running on port 3000");
 });
 
+
 //Function responsible to schedule the diferent workers
 function calculateExpensiveFunction(workerdata: number[]) : Promise<number[]>{
   return new Promise<number[]>((resolve, reject)=>{

@@ -1,0 +1,2 @@
+# Modelical Recruitment Exercises
+This is a repository containing each of the exercises that where asked by Modelical for it's recruitment. Each folder contains the corresponding exercise with a readme.md explaining the exercise and the solution that has been used. 

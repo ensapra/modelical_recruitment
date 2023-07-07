@@ -39,3 +39,9 @@ npx nodemon app.ts //For active reload when changes on the script happen
 
 npx ts-node app.ts //Normal server execution
 ```
+
+## Libraries Used
+It makes use of:
+- express: For the networking
+- jest, supertest: For testing
+- joi: For JSON Schema validation
