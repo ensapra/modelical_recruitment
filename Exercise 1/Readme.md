@@ -32,7 +32,7 @@ npx ts-node app.ts //Normal server execution
 }
 ```
 
-- worker.js: Contains the expensive method call, Fibonacci. Although this version is not extremely expensive, it can be substituted by other more expensive variations. 
+- worker.js: Contains the expensive method called, Fibonacci. Although this version is not extremely expensive, it can be substituted by other more expensive variations. 
 
 ## Libraries Used
 It makes use of:
@@ -40,4 +40,4 @@ It makes use of:
 - worker_threads: For splitting the work 
  
 # Future improvements
-This exercise could be improved by the use of streams. That would allow the system to process multiple api calls concurrently, by stacking the data and delivering chunks of it. 
+This exercise could be improved by the use of streams. That would allow the system to process multiple API calls concurrently, by stacking the data and delivering chunks of it. 
