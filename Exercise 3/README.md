@@ -103,9 +103,9 @@ npx ts-node app.ts //Normal server execution
 
 - fakeDatabase.ts: Containing a fake database generation
 
-On a real case sceneario, fakeDatabase should be replaced by a real database, and do performance checks on the system. If found necessary, the work could be splitted into diferent worker threads to incerease performance
+In a real case scenario, fakeDatabase should be replaced by a real database, and performance checks on the system. If found necessary, the work could be split into different worker threads to increase performance
 
-This piece of code simulates the generation of a chart, the user, in a real scenario, would create a filter with it's desired parameters, and then use that filter to generate the desired chart. 
+This piece of code simulates the generation of a chart, the user, in a real scenario, would create a filter with its desired parameters, and then use that filter to generate the desired chart. 
 
 ```ts
 GenerateTests().then(()=>{
@@ -115,7 +115,7 @@ GenerateTests().then(()=>{
 })
 ```
 
-The filter requires this parameters:
+The filter requires these parameters:
 ````ts
 export class ChartFilter{
     project: string = "";
